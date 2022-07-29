@@ -124,6 +124,7 @@ javascript: (function gpa() {
             let totalScores = 0;
             let gpa = 0;
             let gpaCSC = 0;
+            let gpaCNTT = 0;
             let countCSC = 0;
             let CreditCSC = 0;
             let howICalculated = "%c Điểm tính thế nào nhở ?%c \n\n";
@@ -136,9 +137,14 @@ javascript: (function gpa() {
                     totalCredits += item.credit;
                     totalScores += item.credit * item.score;
 
-                    if (item.course.includes("CSC") && !item.course.includes("CSC00004")) {
-                        countCSC += 1;
-                        gpaCSC += item.score;
+                    if (item.course.includes("CSC")) {
+                        if ( !item.course.includes("CSC00004")) {
+                            countCSC += 1;
+                            gpaCSC += item.score;
+
+                        }
+
+                        gpaCNTT += item.score
                         CreditCSC += item.credit
                     }
 
@@ -158,6 +164,8 @@ javascript: (function gpa() {
             }
             gpa = totalScores / totalCredits;
             gpaCSC = gpaCSC / countCSC;
+            gpaCNTT = gpaCNTT / (countCSC + 1);
+
 
             let removedCoursesSize= 0;
             for(let i =0;i< data.length;i++)
@@ -220,7 +228,7 @@ javascript: (function gpa() {
                 }
 
                 let parentDiv = $("#lich-thi-dkhp")[0];
-                let gpaFieldSet = $('<fieldset><legend>Thống kê GPA</legend><div id="tbGPA_wrapper" class="dataTables_wrapper" rold="grid"><table id="tbGPA" class="dkhp-table dataTable"><thead></thead><tbody role="alert" aria-live="polite" aria-relevant="all"></tbody></table></div><p style="margin-top: 10px; color: blue;"><strong>(*)</strong>: Nhấn Ctr+Shift+I và chọn tab Console để xem chi tiết tính toán.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nếu bạn thấy hữu ích, hãy tặng mình một Star <a href="https://github.com/ptptvitt/GPA-CSC">Tại Đây</a> nhé ^^</p></fieldset>');
+                let gpaFieldSet = $('<fieldset><legend>Thống kê GPA</legend><div id="tbGPA_wrapper" class="dataTables_wrapper" rold="grid"><table id="tbGPA" class="dkhp-table dataTable"><thead></thead><tbody role="alert" aria-live="polite" aria-relevant="all"></tbody></table></div><p style="margin-top: 10px; color: deeppink;"><strong>(*)</strong>: Nhấn Ctr+Shift+I và chọn tab Console để xem chi tiết tính toán.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nếu bạn thấy hữu ích, hãy tặng mình một Star <a href="https://github.com/ptptvitt/GPA-CSC">Tại Đây</a> nhé ^^</p></fieldset>');
                 let gpaTableHead = $(gpaFieldSet).find("thead")[0];
                 let gpaTableBody = $(gpaFieldSet).find("tbody")[0];
 
@@ -236,7 +244,8 @@ javascript: (function gpa() {
                 $(gpaTableHead).append(gpaHeadCol2);
 
                 $(gpaTableBody).append('<tr class="odd"><td class="left ">Điểm trung bình tích lũy (GPA)</td><td class="center gpa"><b>'+gpa+'</b></td></tr>');
-                $(gpaTableBody).append('<tr class="odd"><td class="left ">Điểm trung bình cơ sở ngành tích lũy (GPA)</td><td class="center gpa"><b>'+gpaCSC+'</b></td></tr>');
+                $(gpaTableBody).append('<tr class="odd"><td class="left ">Điểm trung bình cơ sở ngành tích lũy </td><td class="center gpa"><b>'+gpaCSC+'</b></td></tr>');
+                $(gpaTableBody).append('<tr class="odd"><td class="left ">Điểm trung bình cơ sở ngành tích lũy (tính cả môn NMCNTT)</td><td class="center gpa"><b>'+gpaCNTT+'</b></td></tr>');
                 $(gpaTableBody).append('<tr class="even"><td class="left">Tổng tín chỉ đã tích luỹ</td><td class="center gpa">'+totalCredits+' tín chỉ</td></tr>');
                 $(gpaTableBody).append('<tr class="even"><td class="left">Tổng tín chỉ cơ sở ngành đã tích luỹ</td><td class="center gpa">'+CreditCSC+' tín chỉ</td></tr>');
                 $(gpaTableBody).append('<tr class="odd"><td class="left">Tổng điểm đã tích lũy</td><td class="center gpa">'+totalScores+'</td></tr>');
